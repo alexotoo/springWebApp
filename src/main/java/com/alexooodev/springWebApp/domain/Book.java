@@ -1,9 +1,8 @@
 package com.alexooodev.springWebApp.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Book {
@@ -11,15 +10,20 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
-    private String author;
+
+    @ManyToMany
+    @JoinTable(name = "author_book", joinColumns = @JoinColumn(name ="book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id") )
+    private Set<Author> authors;
     private String isbn;
 
     public Book() {
     }
 
-    public Book(String title, String author, String isbn) {
+    public Book(Long id, String title, Set<Author> authors, String isbn) {
+        this.id = id;
         this.title = title;
-        this.author = author;
+        this.authors = authors;
         this.isbn = isbn;
     }
 
@@ -39,13 +43,14 @@ public class Book {
         this.title = title;
     }
 
-    public String getAuthor() {
-        return author;
+    public Set<Author> getAuthors() {
+        return authors;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setAuthors(Set<Author> authors) {
+        this.authors = authors;
     }
+
 
     public String getIsbn() {
         return isbn;
@@ -53,5 +58,30 @@ public class Book {
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return Objects.equals(id, book.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", authors=" + authors +
+                ", isbn='" + isbn + '\'' +
+                '}';
     }
 }
