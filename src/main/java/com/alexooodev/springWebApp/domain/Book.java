@@ -90,7 +90,6 @@ public class Book {
         return "Book{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", authors=" + authors +
                 ", isbn='" + isbn + '\'' +
                 '}';
     }
